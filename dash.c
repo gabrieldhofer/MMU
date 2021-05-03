@@ -1,16 +1,17 @@
 #include <stdio.h>
 
 /********************************************//**
- *  p is the number of bits in a page
+ * p is the number address bits used 
+ * for the page offset
  ***********************************************/
 const int p = 12;
 
-/********************************************//**
- * @param R - resident bit
- * @param D - dirty bit
- * @param PPN - physical page number
- ***********************************************/
 
+/********************************************//**
+ * R - resident bit
+ * D - dirty bit
+ * PPN - physical page number
+ ***********************************************/
 char R[16];
 char D[16];
 char PPN[16];
@@ -19,7 +20,6 @@ int SelectLRUPage(){ }
 void ReadPage(int a, int b){ }
 void WritePage(int a, int b){ }
 int DiskAdr[16];
-
 
 
 /********************************************//**
@@ -40,6 +40,7 @@ void PageFault(int VPageNo){
 }
 
 /********************************************//**
+ *        Vaddr --> Paddr
  * @return physical address
  ***********************************************/
 int VtoP(int Vaddr){
@@ -51,8 +52,9 @@ int VtoP(int Vaddr){
   return (PPN[VPageNo] << p) | PO;
 }
 
-
-
+/********************************************//**
+ * Read a line from stdin, do something...
+ ***********************************************/
 void REPL(){
   char * buf=NULL;
   size_t leng=64;
@@ -62,6 +64,9 @@ void REPL(){
   }
 }
 
+/********************************************//**
+ * Start the REPL 
+ ***********************************************/
 void main(){
   REPL();
 }
