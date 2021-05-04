@@ -21,7 +21,6 @@ void ReadPage(int a, int b){ }
 void WritePage(int a, int b){ }
 int DiskAdr[16];
 
-
 /********************************************//**
  * Handle a missing page
  ***********************************************/
@@ -51,6 +50,17 @@ int VtoP(int Vaddr){
     PageFault(VPageNo);
   return (PPN[VPageNo] << p) | PO;
 }
+
+/********************************************//**
+ *
+ ***********************************************/
+void paging(){
+  int q;
+  printf("Number of processes: \n");
+  scanf("%d", &q);
+  printf("Number of pages: \n");
+}
+
 
 /********************************************//**
  * Read a line from stdin, do something...
