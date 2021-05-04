@@ -19,12 +19,16 @@ free-standing program that is forked from inside the dash) a simulation of:
 f frames of b bytes. Your simulation will run q processes (the user decides how many
 processes), needing p pages. A memory map that keeps track of the frames. Each process
 then accesses memory locations using:
-  a. Basic method, each process having their own page table (needs to be stored
+
+  1. Basic method, each process having their own page table (needs to be stored
 somewhere), requesting p pages from the physical memory.
-  b. Inverted page table, one page table for the system.
+
+  2. Inverted page table, one page table for the system.
+
 2. Page replacement algorithm. You decide which algorithm to use, but it needs to be tied to
 your paging algorithm.
-  a. How many pages for each process?
+
+  1. How many pages for each process?
 
 
 
