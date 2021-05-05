@@ -6,6 +6,10 @@
 #### TODO
 1. print formatted memory map to stdin
 2. write tests for code
+3. make page tables for multiple processes
+4. make an inverted page table 
+
+
 
 #### Memory Management
 As we saw in CoA, memory is central to the operation of a modern computer system. Memory
@@ -25,6 +29,13 @@ somewhere), requesting p pages from the physical memory.
 2. Page replacement algorithm. You decide which algorithm to use, but it needs to be tied to
 your paging algorithm.
     1. How many pages for each process?
+
+#### Terminology used in this Document
+
+**Page**
+**Frame** 
+**Page number**
+**Offset**
 
 
 
