@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <limits.h>
 #include <unistd.h>
+#include <inttypes.h>
+
 
 /********************************************//**
  * 
@@ -34,7 +36,6 @@ int DiskAdr[16];
 void init(){
 
 }
-
 
 /********************************************//**
  * 
@@ -87,7 +88,7 @@ void paging_simulation(){
   for(int i=0;i<q;i++){
     pid = fork();
     if(pid != 0){
-      init()
+      init();
 
       // do something
     }

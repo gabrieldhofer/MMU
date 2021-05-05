@@ -9,8 +9,6 @@
 3. make page tables for multiple processes
 4. make an inverted page table 
 
-
-
 #### Memory Management
 As we saw in CoA, memory is central to the operation of a modern computer system. Memory
 consists of a large array of bytes, each with its own address. The CPU fetches instructions from
@@ -37,8 +35,11 @@ your paging algorithm.
 **Page number**
 **Offset**
 
+#### Details
 
+* we will be using a 32-bit address space (uint32\_t)
 
+### Questions
 
 #### How large should your simulated memory be? 
 
@@ -58,19 +59,9 @@ your paging algorithm.
 
 #### Should the user be allowed to freeze the simulation at any moment and explore the current state? 
 
-
-
 #### Usage
 
-
-
 #### Testing
-
-
-
-
-
-
 
 
 
