@@ -56,7 +56,142 @@ This slide illustrates the size of our page map, the size of virtual memory, and
 ![example\_virtual\_to\_physical\_translation](https://github.com/hofergabriel/MMU/blob/main/images/example_virtual_to_physical_translation.png)
 
 
+### Looking at the Code
 
+#### main() and REPL()
+The main function immediately calls REPL. The REPL function is an infinite loop which reads in a line from the user. If the user enters the command "simulation", then the virtual memory simulation is started. If the user enters the "exit" command, the program terminates.
+
+```
+/********************************************//**
+ *    Two commands exist in the shell: 
+ * 
+ *            dash> simulation
+ *            dash> exit
+ ***********************************************/
+void REPL(){
+  char cwd[PATH_MAX];
+  char * buf=NULL;
+  size_t leng=64;
+  char str[] = "simulation\n\0exit\n\0";
+  for(;;){
+    getcwd(cwd, sizeof(cwd));  
+    printf("%s> ", cwd);
+    getline(&buf, &leng, stdin);
+    if(!strcmp(buf, str)) simulation();
+    else if(!strcmp(buf, &str[12])) return;
+  }
+}
+
+/********************************************//**
+ *    Start the diagnostic shell
+ ***********************************************/
+void main(){
+  REPL();
+}
+
+```
+#### simulation()
+Let's assume that the user enters the virtual memory simulation. 
+Next, the user is how many processes they want to create. Then a menu 
+prompts the user to decide which type of page table to simulate: 
+multiple separate page tables, one for each process, or an inverted page table
+that all processes share. 
+
+```
+/********************************************//**
+ *    Simulation Menu  
+ ***********************************************/
+void simulation(){
+  printf("--------------  Paging Simulation  --------------\n");
+
+  /* Ask user for number of processes and number of pages */
+  int q, p, pid;
+  printf("\nNumber of processes: ");
+  scanf("%d", &NUM_THREADS);
+
+  /* Ask user which type of page table to simulate */
+  int option;
+  printf("Choose page table simulation type: \n");
+  printf("\n\t1. Separate Page Tables\n");
+  printf("\t2. Inverted Page Table\n\n");
+  printf("Option: ");
+  scanf("%d", &option);
+
+  switch(option){
+    case 1: 
+      separatePageTables();      
+      break;
+    case 2: 
+      invertedPageTables();
+      break;
+    default:
+      printf("Invalid Option\n");
+      break;
+  }
+
+}
+
+```
+
+#### separatePageTables()
+If the user chooses separate page tables, each process will be assigned it's own page table. 
+
+In this function, multithreading is used to create multiple lightweight processes. Threads were used in this program because threads share the same memory. 
+
+We want the threads to share the same memory because they need to be able to access the same physical memory. 
+
+As shown in the code, the number of threads/"processes" created is equal to the NUM\_THREADS variable which was entered by the user.
+
+When `pthread_create()` is called, a new thread starts execution in the `makeTableAndRequests()` routine.
+
+```
+/********************************************//**
+ *    Each process gets its own page table
+ ***********************************************/
+void separatePageTables(){
+  printf("------------  Separate Page Tables  -------------\n");
+
+  pthread_barrier_init (&barrier, NULL, NUM_THREADS+1 );
+
+  pthread_t threads[NUM_THREADS];
+  int rc;
+  for(int i=0; i<NUM_THREADS; i++){
+    rc = pthread_create( &threads[i], NULL, makeTableAndRequests, (void *)i);
+    if(rc){
+      fprintf( stderr, "Error: unable to create thread, %d\n", rc);
+      exit(-1);
+    }
+  }
+
+  pthread_barrier_wait( &barrier );
+  for(int i=0; i<NUM_THREADS; i++)
+    pthread_join(threads[i], NULL);
+  pthread_exit(NULL);
+}
+
+```
+
+#### makeTableAndRequests
+
+
+
+
+
+### Usage
+
+```
+$ make
+$ ./dash
+```
+
+To keep things simple, there are two commands in this dash shell. We can run the simulation by entering the command "simulation" into the shell: 
+```
+/home/gabriel/dash> simulation
+```
+The second command is "exit" which exits the shell: 
+```
+/home/gabriel/dash> exit
+```
 
 
 ![virtual\_memory\_the\_CS\_view](https://github.com/hofergabriel/MMU/blob/main/images/virtual_memory_the_CS_view.png)
