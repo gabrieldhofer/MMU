@@ -3,7 +3,6 @@
 #include <unistd.h>
 #include <inttypes.h>
 
-
 /********************************************//**
  * 
  *    p is the number address bits used 
@@ -131,10 +130,5 @@ void REPL(){
 void main(){
   REPL();
 }
-
-
-
-
-
 
 
