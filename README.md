@@ -48,29 +48,23 @@ const int p = 8;
 const int v = 4;
 const int m = 3;
 ```
-As we can see in the code, p, v and m are constant integers. So every time that the program runs, p=8, v=4, and m=3. This can be changed in the future to let the user choose values for these variables, but I kept them constant to make explaining the implementation easier.
+As we can see in the code, p, v and m are constant integers. So every time that the program runs, p has the vale of 8, v has the value of 4, and m has the value of 3. This can be changed in the future to let the user choose values for these variables, but I kept them constant to make explaining the implementation easier.
 
 ![page\_map\_arithmetic](https://github.com/hofergabriel/MMU/blob/main/images/page_map_arithmetic.png)
 
-Based on the slide above we can calculate the following: 
+Based on the slide above we calculate the following for our simulation: 
 
-* $ (v+p) = 12 $ bits in virtual address
-* $ (m+p) = 11 $ bits in physical address
-* $ 2^v = 16 $ number of virtual pages
-* $ 2^m = 8 $ number of physical pages
-* $ 2^p = 256 $ number of bytes per physical page
-* $ 2^(v+p) = 4096 $ number of bytes in virtual memory
-* $ 2^(v+m) = 2048 $ number of bytes in physical memory
+* (v+p) = 12 bits in virtual address
+* (m+p) = 11 bits in physical address
+* 2^v = 16 virtual pages
+* 2^m = 8 physical pages
+* 2^p = 256 bytes per physical page
+* 2^(v+p) = 4096 bytes in virtual memory
+* 2^(v+m) = 2048 bytes in physical memory
 
-
-### Translating Virtual Addresses to Physical Addresses
-
-> Here’s an example of the MMU in action. To make things simple, assume that the virtual address is 12 bits, consisting of an 8-bit page offset and a 4-bit virtual page number. So there are 2^4 = 16 virtual pages. The physical address is 11 bits, divided into the same 8-bit page offset and a 3-bit physical page number. So there are  2^3 = 8 physical pages.
+This slide illustrates the size of our page map, virtual memory, and physical memory.
 
 ![example\_virtual\_to\_physical\_translation](https://github.com/hofergabriel/MMU/blob/main/images/example_virtual_to_physical_translation.png)
-
-
-
 
 
 
