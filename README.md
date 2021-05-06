@@ -3,6 +3,32 @@
 #### Author: Gabriel Hofer
 #### Date: May 2, 2021
 
+### Benefits of Virtual Memory 
+
+Why should operating systems support virtual memory?
+
+* Provide a separate, isolated memory space for applications that isn't shared with other 
+applications.
+* Isolated memory can help increase security 
+* Creating arbitrarily large memory addresses that may or may not exist in actual memory
+
+### What are segmentation and pages? 
+
+In order for different processes to have their own memory, we need to partition or divide or split the 
+memory into smaller pieces. This is what is known as **segmentation**.
+
+The range of virtual addresses is partitioned/divided into smaller chunks called **pages**.
+
+Physical memory is divided into smaller pieces called **frames**.
+
+Moverover, an address in virtual memory belongs to a unique **page**, and this address
+also has an offset in that page that tells us where the address is relative to the beginning
+of the page.
+
+### What is a page table? 
+
+Essentially, a page table is used to map virtual addresses to physical addresses. 
+
 ### MIT OpenCourseWare slides
 This project's simulation of virtual memory and paging was implemented based
 on the information presented in MIT's OpenCoursWare [slides](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-004-computation-structures-spring-2017/c16/c16s1/).
@@ -20,52 +46,29 @@ on the information presented in MIT's OpenCoursWare [slides](https://ocw.mit.edu
  *    based on the example in the
  *    MIT OpenCourseWare slides
  ***********************************************/
+const int p = 8;
 const int v = 4;
 const int m = 3;
-const int p = 8;
 ```
+For clarity purposes, the program set p, v, and m to be fixed and unchanging. The following slide illustrates what p, v, and m mean.
+
+![page\_map\_arithmetic](https://github.com/hofergabriel/MMU/blob/main/images/page_map_arithmetic.png)
 
 
-
-![page\_map\_arithmetic](https://github.com/hofergabriel/MMU/blob/main/images/page_map_arithmetic.png | width=100)
-
-
-
-
-#### Benefits of Virtual Memory 
-
-Why should operating systems support virtual memory?
-
-* Provide a separate, isolated memory space for applications that isn't shared with other 
-applications.
-* Isolated memory can help increase security 
-* Creating arbitrarily large memory addresses that may or may not exist in actual memory
-
-#### What are segmentation and pages? 
-
-In order for different processes to have their own memory, we need to partition or divide or split the 
-memory into smaller pieces. This is what is known as **segmentation**.
-
-The range of virtual addresses is partitioned/divided into smaller chunks called **pages**.
-
-Physical memory is divided into smaller pieces called **frames**.
-
-Moverover, an address in virtual memory belongs to a unique **page**, and this address
-also has an offset in that page that tells us where the address is relative to the beginning
-of the page.
-
-#### What is a page table? 
-
-Essentially, a page table is used to map virtual addresses to physical addresses. 
-
-#### Translating Virtual Addresses to Physical Addresses
-
-This project will be based on implementing the model for virtual memory detailed and explained 
-in the MIT Opencourseware [slides](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-004-computation-structures-spring-2017/c16/c16s1/)
+### Translating Virtual Addresses to Physical Addresses
 
 > Here’s an example of the MMU in action. To make things simple, assume that the virtual address is 12 bits, consisting of an 8-bit page offset and a 4-bit virtual page number. So there are 2^4 = 16 virtual pages. The physical address is 11 bits, divided into the same 8-bit page offset and a 3-bit physical page number. So there are  2^3 = 8 physical pages.
 
 ![example\_virtual\_to\_physical\_translation](https://github.com/hofergabriel/MMU/blob/main/images/example_virtual_to_physical_translation.png)
+
+
+
+
+
+
+
+
+
 
 ![virtual\_memory\_the\_CS\_view](https://github.com/hofergabriel/MMU/blob/main/images/virtual_memory_the_CS_view.png)
 
