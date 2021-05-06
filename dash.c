@@ -5,8 +5,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <string.h>
 
 
+/********************************************//**
+ * 
+ *    For synchronizing threads
+ * 
+ ***********************************************/
 pthread_barrier_t   barrier;
 
 /********************************************//**
@@ -100,7 +106,6 @@ void *makeRequest(void *threadid){
 void separatePageTables(){
   printf("------------  Separate Page Tables  -------------\n");
 
-  printf("NUM_THREADS: %d\n", NUM_THREADS);
   pthread_barrier_init (&barrier, NULL, NUM_THREADS+1 );
 
   pthread_t threads[NUM_THREADS];
@@ -113,16 +118,10 @@ void separatePageTables(){
     }
   }
 
-  printf("before barrier\n");
   pthread_barrier_wait( &barrier );
-  printf("after barrier\n");
-
-  for(int i=0; i<NUM_THREADS; i++){
+  for(int i=0; i<NUM_THREADS; i++)
     pthread_join(threads[i], NULL);
-  }
-
-
-  //pthread_exit(NULL);
+  pthread_exit(NULL);
 }
 
 /********************************************//**
@@ -146,12 +145,17 @@ void invertedPageTables(){
   }
 
   pthread_barrier_wait( &barrier );
+  for(int i=0; i<NUM_THREADS; i++)
+    pthread_join(threads[i], NULL);
   pthread_exit(NULL);
 }
 
+
+
+
 /********************************************//**
  *
- *    THE SIMULATION
+ *              THE SIMULATION
  *
  ***********************************************/
 void simulation(){
@@ -184,23 +188,23 @@ void simulation(){
 
 /********************************************//**
  * 
- *    Only one command exists in the shell: 
+ *    Two commands exists in the shell: 
  * 
  *            dash> simulation
+ *            dash> exit
  * 
  ***********************************************/
 void REPL(){
   char cwd[PATH_MAX];
   char * buf=NULL;
   size_t leng=64;
+  char str[] = "simulation\n\0exit\n\0";
   for(;;){
-
-    simulation();
-
     getcwd(cwd, sizeof(cwd));  
     printf("%s> ", cwd);
     getline(&buf, &leng, stdin);
-    printf("%s", buf);
+    if(!strcmp(buf, str)) simulation();
+    else if(!strcmp(buf, &str[12])) return;
   }
 }
 
