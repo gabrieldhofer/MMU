@@ -3,7 +3,7 @@ Author: Gabriel Hofer
 Date: May 2, 2021  
 
 ### The Purpose of Virtual Memory 
-Operating System support virtual memory for the following reasons: 
+Operating Systems support virtual memory for the following reasons: 
 * Applications can have their own separate or isolated chunk of memory that can't be accessed by other applications.
 * Memory isolation increases security.
 * It is possible to create arbitrarily large memory addresses that may or may not exist in actual memory
@@ -92,7 +92,7 @@ void main(){
 ```
 #### simulation()
 Let's assume that the user enters the virtual memory simulation. 
-Next, the user is how many processes they want to create. Then a menu 
+Next, the user enters the number of processes they want to create. Then a menu 
 prompts the user to decide which type of page table to simulate: 
 multiple separate page tables, one for each process, or an inverted page table
 that all processes share. 
@@ -172,9 +172,105 @@ void separatePageTables(){
 ```
 
 #### makeTableAndRequests
+The function allocates a page table for one process. The page table is actually implemented as three separate arrays.
+A page table consists of 
+* R - a character array where element i represents the resident bit for
+page i 
+* D - a character array where element i tells us if the contents in physical memory match the contents in secondary storage (on the disk).
+* PPN - an integer array where elelemnt i store the physical page number PPN for page i in the page table.
+
+Additionally, we also allocate an array called `pageFrequency` which helps us keep track of how often pages are accessed by the CPU. 
+`pageFrequency` is used to implement the page replacement algorithm (LFU).
+
+After the page is allocated, the program starts simulating memory accesses by making several calls to the VtoP() function.
+
+Inside the for loop, a random virtual address is generated.
+
+Then VtoP() is called to lookup the physical address.
+
+We don't do anything with the physical address, because we are mostly interested in implementing the "lookup".
+
+```
+/********************************************//**
+ *    1. Allocate new Page Table for thread
+ *    2. Access virtual memory by calling VtoP()
+ ***********************************************/
+void * makeTableAndRequests(void *threadid){
+  long tid = (long)threadid;
+  printf("Thread ID, %ld\n", tid);
+
+  /* Thread allocates its own page table */
+  /*  Allocate 2^v pages in page table */
+  char * R = malloc( (1<<v) * sizeof(char));
+  char * D = malloc( (1<<v) * sizeof(char));
+  int * PPN = malloc( (1<<v) * sizeof(int));
+  int * pageFrequency = malloc( (1<<v) * sizeof(int));
+
+  /* Access virtual memory multiple times */
+  for(int i=0;i<16;i++){
+
+    /*  produce random address in virtual memory */
+    int r = rand() % (1<<(v+p)+1);
+    printf("Thread %ld requesting address: %d\n", tid, r);
+
+    /*  request access to virtual memory location */
+    VtoP(r, R, D, PPN, pageFrequency);
+  }
+
+  pthread_barrier_wait(&barrier);
+  pthread_exit(NULL);
+}
+```
+
+#### VtoP
+
+This function accepts a virtual address and calculates the virtual page number (`VPageNo`) and the page offset (`PO`).
+
+`pageFrequency` is updated to reflect accessing a virtual page in the page table.
+
+Then, if the resident bit is set, the physical address is calculated and returned. 
+Otherwise, a `PageFault` occurs.
+
+```
+/********************************************//**
+ *    Virtual Address --> Physical Address
+ *    @return physical address
+ ***********************************************/
+int VtoP(int Vaddr, char * R, char * D, int * PPN, int * pageFrequency){
+  int VPageNo = Vaddr >> p;
+  int PO = Vaddr & ((1 << p) - 1);
+
+  pageFrequency[VPageNo] += 1;
+  if(R[VPageNo] == 0)
+    PageFault(VPageNo, R, D, PPN, pageFrequency);
+
+  return (PPN[VPageNo] << p) | PO;
+}
+```
+
+#### PageFault
+
+When handling a page fault, 
 
 
+```
+/********************************************//**
+ *    Handle a missing page
+ ***********************************************/
+void PageFault(int VPageNo, char * R, char * D, int * PPN, int * pageFrequency){
+  printf("\tPage Fault occurred\n");
+  int i;
+  i = SelectLRUPage(pageFrequency);
+  if(D[i] == 1)
+    WritePage(DiskAdr[i],PPN[i]);
+  R[i] = 0;
 
+  PPN[VPageNo] = PPN[i];
+  ReadPage(DiskAdr[VPageNo], PPN[i]);
+  R[VPageNo] = 1;
+  D[VPageNo] = 1;
+}
+```
 
 
 ### Usage
