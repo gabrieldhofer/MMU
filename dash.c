@@ -54,22 +54,25 @@ const int p = 8;
 /********************************************//**
  *    Frequency Array for LFU 
  ***********************************************/
-int pageFrequency[16];
+//int pageFrequency[16];
 
 /********************************************//**
  *    Page Replacement Algorithm: 
  *    Least Frequently Used (LFU)
  ***********************************************/
-int SelectLRUPage(){ 
+int SelectLRUPage(int * pageFrequency){ 
   // change to SelectLFUPage()
   int idx=0;
-  int mx=0;
+  int mn=100000;
+  printf("\tpageFrequency[]: ");
   for(int i=0;i<16;i++){
-    if(pageFrequency[i]>mx){
-      mx = pageFrequency[i];
+    printf("%d ",pageFrequency[i]);
+    if(pageFrequency[i]<mn){
+      mn = pageFrequency[i];
       idx = i;
     }
   }
+  printf("\n");
   pageFrequency[idx] = 1;
   printf("\tLeast Frequency Page: %d\n", idx);
   return idx;
@@ -92,10 +95,10 @@ int DiskAdr[16];
 /********************************************//**
  *    Handle a missing page
  ***********************************************/
-void PageFault(int VPageNo, char * R, char * D, int * PPN){
+void PageFault(int VPageNo, char * R, char * D, int * PPN, int * pageFrequency){
   printf("\tPage Fault occurred\n");
   int i;
-  i = SelectLRUPage();
+  i = SelectLRUPage(pageFrequency);
   if(D[i] == 1)
     WritePage(DiskAdr[i],PPN[i]);
   R[i] = 0;
@@ -111,13 +114,14 @@ void PageFault(int VPageNo, char * R, char * D, int * PPN){
  *              
  *    @return physical address
  ***********************************************/
-int VtoP(int Vaddr, char * R, char * D, int * PPN){
+int VtoP(int Vaddr, char * R, char * D, int * PPN, int * pageFrequency){
   int VPageNo = Vaddr >> p;
   int PO = Vaddr & ((1 << p) - 1);
 
   pageFrequency[VPageNo] += 1;
   if(R[VPageNo] == 0)
-    PageFault(VPageNo, R, D, PPN);
+    PageFault(VPageNo, R, D, PPN, pageFrequency);
+
   return (PPN[VPageNo] << p) | PO;
 }
 
@@ -135,6 +139,7 @@ void * makeTableAndRequests(void *threadid){
   char * R = malloc( 1<<v );
   char * D = malloc( 1<<v );
   int * PPN = malloc( 1<<v );
+  int * pageFrequency = malloc( 1<<v );
 
   /* Access virtual memory multiple times */
   for(int i=0;i<8;i++){
@@ -144,7 +149,7 @@ void * makeTableAndRequests(void *threadid){
     printf("Thread %ld requesting address: %d\n", tid, r);
 
     /*  request access to virtual memory location */
-    VtoP(r, R, D, PPN);
+    VtoP(r, R, D, PPN, pageFrequency);
   }
 
   pthread_barrier_wait(&barrier);
