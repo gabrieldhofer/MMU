@@ -49,6 +49,8 @@ in the MIT Opencourseware [slides](https://ocw.mit.edu/courses/electrical-engine
 
 ![virtual\_memory\_the\_CS\_view](https://github.com/hofergabriel/MMU/blob/main/images/virtual_memory_the_CS_view.png)
 
+![page\_map\_arithmetic](https://github.com/hofergabriel/MMU/blob/main/images/page_map_arithmetic.png)
+
 #### Benefits of Virtual Memory 
 
 Why should operating systems support virtual memory?
