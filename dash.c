@@ -25,58 +25,45 @@
 #include <string.h>
 
 
+/********************************************//**
+ *    Physical Memory (Array)
+ *    All threads share this physical memory
+ ***********************************************/
+int PHYSICAL_MEMORY[2048];
 
 /********************************************//**
- * 
  *    For synchronizing threads
- * 
  ***********************************************/
 pthread_barrier_t   barrier;
 
 /********************************************//**
- * 
  *    The user decides the number of processes
  *    to run in the simulation.
- * 
  *    For our implementation, a thread will 
  *    represent a process in the simulation
- * 
  ***********************************************/
 uint32_t NUM_THREADS;
 
 /********************************************//**
- * 
- *    p is the number address bits used 
- *    for the page offset
- * 
+ *    8 bits in the offset 
+ *    per the example in the
+ *    MIT OpenCourseWare slides
  ***********************************************/
-const int p = 12;
-
-/********************************************//**
- * 
- *    R - resident bit
- *    D - dirty bit
- *    PPN - physical page number
- * 
- ***********************************************/
-//char R[16];
-//char D[16];
-//char PPN[16];
-
-
-
-
+const int p = 8;
 
 
 int SelectLRUPage(){ }
 void ReadPage(int a, int b){ }
 void WritePage(int a, int b){ }
+
+
+/********************************************//**
+ *    Secondary Memory Storage (Disk)
+ ***********************************************/
 int DiskAdr[16];
 
 /********************************************//**
- * 
  *    Handle a missing page
- * 
  ***********************************************/
 void PageFault(int VPageNo){
   int i;
@@ -106,15 +93,6 @@ int VtoP(int Vaddr){
   if(R[VPageNo] == 0)
     PageFault(VPageNo);
   return (PPN[VPageNo] << p) | PO;
-}
-
-
-void readVirtual(char * R, char * D, int * PPN, int Vaddr){
-  // check R bits... 
-}
-
-void writeVirtual(char * R, char * D, int * PPN, int Vaddr){
-  // check R bits...
 }
 
 
