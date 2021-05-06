@@ -2,6 +2,21 @@
 #include <limits.h>
 #include <unistd.h>
 #include <inttypes.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+
+/********************************************//**
+ * 
+ *    The user decides the number of processes
+ *    to run in the simulation.
+ * 
+ *    For our implementation, a thread will 
+ *    represent a process in the simulation
+ * 
+ ***********************************************/
+uint32_t NUM_THREADS;
+
 
 /********************************************//**
  * 
@@ -26,15 +41,6 @@ int SelectLRUPage(){ }
 void ReadPage(int a, int b){ }
 void WritePage(int a, int b){ }
 int DiskAdr[16];
-
-/********************************************//**
- * 
- *    Make new Page Table
- * 
- ***********************************************/
-void init(){
-
-}
 
 /********************************************//**
  * 
@@ -71,26 +77,72 @@ int VtoP(int Vaddr){
   return (PPN[VPageNo] << p) | PO;
 }
 
+
 /********************************************//**
  *
  *
  *
  ***********************************************/
-void paging_simulation(){
+void *makeRequest(void *threadid){
+  long tid = (long)threadid;
+  printf("thread ID, %ld\n", tid);
+}
+
+/********************************************//**
+ *
+ *    Each process gets its own page table
+ *
+ ***********************************************/
+void separatePageTables(){
+  pthread_t threads[NUM_THREADS];
+  int rc;
+  for(int i=0; i<NUM_THREADS; i++){
+    rc = pthread_create(&threads[i], NULL, makeRequest, (void *)i);
+    if(rc){
+      fprintf( stderr, "Error: unable to create thread, %d\n", rc);
+      exit(-1);
+    }
+  }
+}
+
+/********************************************//**
+ *
+ *    All processes share same page table
+ *
+ ***********************************************/
+void invertedPageTable(){
+
+
+}
+
+/********************************************//**
+ *
+ *    THE SIMULATION
+ *
+ ***********************************************/
+void simulation(){
   printf("Paging Simulation\n");
   int q, p, pid;
   printf("Number of processes: \n");
-  scanf("%d", &q);
+  scanf("%d", &NUM_THREADS);
   printf("Number of pages: \n");
   scanf("%d", &p);
 
-  for(int i=0;i<q;i++){
-    pid = fork();
-    if(pid != 0){
-      init();
+  int option;
+  printf("\n\t1. Separate Page Tables\n");
+  printf("\t2. Hashed Page Table\n\n");
+  scanf("%d", &option);
 
-      // do something
-    }
+  switch(option){
+    case 1: 
+      separatePageTables();      
+      break;
+    case 2: 
+      invertedPageTables();
+      break;
+    default:
+      printf("Invalid Option\n");
+      break;
   }
 
 }
@@ -107,7 +159,9 @@ void page_replacement_simulation(){
 
 /********************************************//**
  * 
- *    Read a line from stdin, do something...
+ *    Only one command exists in the shell: 
+ * 
+ *            dash> simulation
  * 
  ***********************************************/
 void REPL(){
@@ -115,6 +169,9 @@ void REPL(){
   char * buf=NULL;
   size_t leng=64;
   for(;;){
+
+    simulation();
+
     getcwd(cwd, sizeof(cwd));  
     printf("%s> ", cwd);
     getline(&buf, &leng, stdin);
@@ -124,7 +181,7 @@ void REPL(){
 
 /********************************************//**
  * 
- *    Start the REPL 
+ *    Start the shell
  * 
  ***********************************************/
 void main(){
