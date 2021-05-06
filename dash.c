@@ -94,6 +94,8 @@ void *makeRequest(void *threadid){
  *
  ***********************************************/
 void separatePageTables(){
+  printf("------------  Separate Page Tables  -------------\n");
+
   pthread_t threads[NUM_THREADS];
   int rc;
   for(int i=0; i<NUM_THREADS; i++){
@@ -103,6 +105,7 @@ void separatePageTables(){
       exit(-1);
     }
   }
+  pthread_exit(NULL);
 }
 
 /********************************************//**
@@ -110,9 +113,19 @@ void separatePageTables(){
  *    All processes share same page table
  *
  ***********************************************/
-void invertedPageTable(){
+void invertedPageTables(){
+  printf("------------  Inverted Page Tables  -------------\n");
 
-
+  pthread_t threads[NUM_THREADS];
+  int rc;
+  for(int i=0; i<NUM_THREADS; i++){
+    rc = pthread_create(&threads[i], NULL, makeRequest, (void *)i);
+    if(rc){
+      fprintf( stderr, "Error: unable to create thread, %d\n", rc);
+      exit(-1);
+    }
+  }
+  pthread_exit(NULL);
 }
 
 /********************************************//**
@@ -121,11 +134,12 @@ void invertedPageTable(){
  *
  ***********************************************/
 void simulation(){
-  printf("Paging Simulation\n");
+  printf("--------------  Paging Simulation  --------------\n");
+
   int q, p, pid;
-  printf("Number of processes: \n");
+  printf("\nNumber of processes: ");
   scanf("%d", &NUM_THREADS);
-  printf("Number of pages: \n");
+  printf("\nNumber of pages: ");
   scanf("%d", &p);
 
   int option;
@@ -144,16 +158,6 @@ void simulation(){
       printf("Invalid Option\n");
       break;
   }
-
-}
-
-/********************************************//**
- *
- *
- *
- ***********************************************/
-void page_replacement_simulation(){
-  printf("Page Replacement Simulation\n");
 
 }
 
