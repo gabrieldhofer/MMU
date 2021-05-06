@@ -48,6 +48,7 @@ your paging algorithm.
 
 
 ![two\_processes\_osdev](https://github.com/hofergabriel/MMU/blob/main/images/two_processes_osdev.png)
+[1][1]
 
 
 [1]: https://wiki.osdev.org/Paging#Virtual_Address_Spaces
