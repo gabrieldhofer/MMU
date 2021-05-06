@@ -48,12 +48,12 @@ each process will have its own page table for the basic method.
 
 Why should operating systems support virtual memory?
 
-* providing a separate or "isolated" memory space for applications that isn't shared with other 
+* Provide a separate, isolated memory space for applications that isn't shared with other 
 applications.
-* isolated memory also leads to increased security 
-* creating arbitrarily large memory addresses that may or may not exist in actual memory
+* Isolated memory can help increase security 
+* Creating arbitrarily large memory addresses that may or may not exist in actual memory
 
-#### What is segmentation and pages? 
+#### What are segmentation and pages? 
 
 In order for different processes to have their own memory, we need to partition or divide or split the 
 memory into smaller pieces. This is what is known as **segmentation**.
@@ -66,13 +66,9 @@ Moverover, an address in virtual memory belongs to a unique **page**, and this a
 also has an offset in that page that tells us where the address is relative to the beginning
 of the page.
 
-### What is a page table? 
+#### What is a page table? 
 
 Essentially, a page table is used to map virtual addresses to physical addresses. 
-
-
-
-
 
 #### Translating Virtual Addresses to Physical Addresses
 
