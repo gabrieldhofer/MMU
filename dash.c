@@ -51,11 +51,32 @@ const int v = 4;
 const int m = 3;
 const int p = 8;
 
+/********************************************//**
+ *    Page Replacement Algorithm: 
+ *    Least Frequently Used (LFU)
+ ***********************************************/
+int pageFrequency[16];
 
-int SelectLRUPage(){ }
+/********************************************//**
+ *    Page Replacement Algorithm: 
+ *    Least Recently Used (LRU)
+ ***********************************************/
+int SelectLRUPage(){ 
+  // change to SelectLFUPage()
+  int idx=0;
+  int mx=0;
+  for(int i=0;i<16;i++){
+    if(pageFrequency[i]>mx){
+      mx = pageFrequency[i];
+      idx = i;
+    }
+  }
+  pageFrequency[idx] = 1;
+  return idx;
+}
+
 void ReadPage(int a, int b){ }
 void WritePage(int a, int b){ }
-
 
 /********************************************//**
  *    Physical Memory (Array)
