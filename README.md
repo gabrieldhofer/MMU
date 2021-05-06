@@ -28,32 +28,21 @@ somewhere), requesting p pages from the physical memory.
 your paging algorithm.
     1. How many pages for each process?
 
+
+
+
+
 #### Parameters: e, f, b, q, p
-For the simplicity and clarity of this project, e, f, b, will be fixed values in this program:
+For clarity, some parameters of the parameters mentioned above will be fixed: 
 
 * e = 2048
 * f = 8
 * b = 256
 
-The number of pages will be equal to the number of processes chosen by the user since each 
-process will have its own page table for the basic method mentioned in the writeup.
+Since we ask the user how many processes to create, q is not fixed.
 
-#### Translating Virtual Addresses to Physical Addresses
-
-This project will be based on implementing the model for virtual memory detailed and explained 
-in the MIT Opencourseware [slides](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-004-computation-structures-spring-2017/c16/c16s1/)
-
-> Here’s an example of the MMU in action. To make things simple, assume that the virtual address is 12 bits, consisting of an 8-bit page offset and a 4-bit virtual page number. So there are 2^4 = 16 virtual pages. The physical address is 11 bits, divided into the same 8-bit page offset and a 3-bit physical page number. So there are  2^3 = 8 physical pages.
-
-![example\_virtual\_to\_physical\_translation](https://github.com/hofergabriel/MMU/blob/main/images/example_virtual_to_physical_translation.png)
-
-![virtual\_memory\_the\_CS\_view](https://github.com/hofergabriel/MMU/blob/main/images/virtual_memory_the_CS_view.png)
-
-> There are three architectural parameters that characterize a virtual memory system and hence the architecture of the MMU.
-
-> P is the number of address bits used for the page offset in both virtual and physical addresses. V is the number of address bits used for the virtual page number. And M is the number of address bits used for the physical page number. All the other parameters, listed on the right, are derived from these three parameters.
-
-![page\_map\_arithmetic](https://github.com/hofergabriel/MMU/blob/main/images/page_map_arithmetic.png)
+The number of pages p will be equal to the number of processes q chosen by the user since 
+each process will have its own page table for the basic method.
 
 #### Benefits of Virtual Memory 
 
@@ -80,6 +69,28 @@ of the page.
 ### What is a page table? 
 
 Essentially, a page table is used to map virtual addresses to physical addresses. 
+
+
+
+
+
+#### Translating Virtual Addresses to Physical Addresses
+
+This project will be based on implementing the model for virtual memory detailed and explained 
+in the MIT Opencourseware [slides](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-004-computation-structures-spring-2017/c16/c16s1/)
+
+> Here’s an example of the MMU in action. To make things simple, assume that the virtual address is 12 bits, consisting of an 8-bit page offset and a 4-bit virtual page number. So there are 2^4 = 16 virtual pages. The physical address is 11 bits, divided into the same 8-bit page offset and a 3-bit physical page number. So there are  2^3 = 8 physical pages.
+
+![example\_virtual\_to\_physical\_translation](https://github.com/hofergabriel/MMU/blob/main/images/example_virtual_to_physical_translation.png)
+
+![virtual\_memory\_the\_CS\_view](https://github.com/hofergabriel/MMU/blob/main/images/virtual_memory_the_CS_view.png)
+
+> There are three architectural parameters that characterize a virtual memory system and hence the architecture of the MMU.
+
+> P is the number of address bits used for the page offset in both virtual and physical addresses. V is the number of address bits used for the virtual page number. And M is the number of address bits used for the physical page number. All the other parameters, listed on the right, are derived from these three parameters.
+
+![page\_map\_arithmetic](https://github.com/hofergabriel/MMU/blob/main/images/page_map_arithmetic.png)
+
 
 #### What are resident bits and dirty bits? 
 

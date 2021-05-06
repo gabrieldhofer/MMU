@@ -25,11 +25,6 @@
 #include <string.h>
 
 
-/********************************************//**
- *    Physical Memory (Array)
- *    All threads share this physical memory
- ***********************************************/
-int PHYSICAL_MEMORY[2048];
 
 /********************************************//**
  *    For synchronizing threads
@@ -46,16 +41,20 @@ uint32_t NUM_THREADS;
 
 /********************************************//**
  *    8 bits in the offset 
- *    per the example in the
+ *    based on the example in the
  *    MIT OpenCourseWare slides
  ***********************************************/
 const int p = 8;
-
 
 int SelectLRUPage(){ }
 void ReadPage(int a, int b){ }
 void WritePage(int a, int b){ }
 
+/********************************************//**
+ *    Physical Memory (Array)
+ *    All threads share this physical memory
+ ***********************************************/
+int PhysicalMemory[2048];
 
 /********************************************//**
  *    Secondary Memory Storage (Disk)
@@ -80,11 +79,9 @@ void PageFault(int VPageNo){
 }
 
 /********************************************//**
- *              
  *    Virtual Address --> Physical Address
  *              
  *    @return physical address
- *              
  ***********************************************/
 int VtoP(int Vaddr){
   int VPageNo = Vaddr >> p;
@@ -97,25 +94,23 @@ int VtoP(int Vaddr){
 
 
 /********************************************//**
- *
  *    1. Allocate new Page Table for thread
  *    2. Access virtual memory by calling VtoP()
- *
  ***********************************************/
 void * makeTableAndRequests(void *threadid){
   long tid = (long)threadid;
   printf("thread ID, %ld\n", tid);
 
-  /* thread allocates its own page table */
+  /* Thread allocates its own page table */
   char * R = malloc(16);
   char * D = malloc(16);
   int * PPN = malloc(16);
 
-  /* access virtual memory multiple times */
+  /* Access virtual memory multiple times */
   for(int i=0;i<8;i++){
     // random access 
-    int r = rand() % 16;
-
+    int r = rand() % (1<<12);
+    VtoP(r)
   }
 
   pthread_barrier_wait(&barrier);
@@ -123,9 +118,7 @@ void * makeTableAndRequests(void *threadid){
 }
 
 /********************************************//**
- *
  *    Each process gets its own page table
- *
  ***********************************************/
 void separatePageTables(){
   printf("------------  Separate Page Tables  -------------\n");
@@ -149,9 +142,7 @@ void separatePageTables(){
 }
 
 /********************************************//**
- *
- *    All processes share same page table
- *
+ *    All processes share the same page table
  ***********************************************/
 void invertedPageTables(){
   printf("------------  Inverted Page Tables  -------------\n");
@@ -175,22 +166,23 @@ void invertedPageTables(){
 }
 
 /********************************************//**
- *
  *              THE SIMULATION
- *
  ***********************************************/
 void simulation(){
   printf("--------------  Paging Simulation  --------------\n");
 
+  /* Ask user for number of processes and number of pages */
   int q, p, pid;
   printf("\nNumber of processes: ");
   scanf("%d", &NUM_THREADS);
   printf("\nNumber of pages: ");
   scanf("%d", &p);
 
+  /* Ask user which type of page table to simulate */
   int option;
+  printf("Choose page table simulation type: \n");
   printf("\n\t1. Separate Page Tables\n");
-  printf("\t2. Hashed Page Table\n\n");
+  printf("\t2. Inverted Page Table\n\n");
   scanf("%d", &option);
 
   switch(option){
@@ -208,12 +200,10 @@ void simulation(){
 }
 
 /********************************************//**
- * 
- *    Two commands exists in the shell: 
+ *    Two commands exist in the shell: 
  * 
  *            dash> simulation
  *            dash> exit
- * 
  ***********************************************/
 void REPL(){
   char cwd[PATH_MAX];
@@ -230,9 +220,7 @@ void REPL(){
 }
 
 /********************************************//**
- * 
- *    Start the shell
- * 
+ *    Start the diagnostic shell
  ***********************************************/
 void main(){
   REPL();
