@@ -1,30 +1,23 @@
 ### Memory Management Unit (MMU)
-#### Operating Systems Final Exam
-#### Author: Gabriel Hofer
-#### Date: May 2, 2021
+Author: Gabriel Hofer  
+Date: May 2, 2021  
 
 ### The Purpose of Virtual Memory 
-
-Why should operating systems have virtual memory?
-* Provide a separate, isolated memory space for applications that isn't shared with other 
+Operating System support virtual memory for the following reasons: 
+* Applications can have their own separate or isolated chunk of memory that can't be accessed by other applications.
 applications.
-* Isolated memory can help increase security 
-* Creating arbitrarily large memory addresses that may or may not exist in actual memory
+* Memory isolation increases security 
+* It is possible to create arbitrarily large memory addresses that may or may not exist in actual memory
 
 ### What is Segmentation and Paging? 
-
 In order for different processes to have their own memory, memory needs to be partitioned or divided into smaller pieces. This is called **segmentation**.
-
 The range of virtual addresses is partitioned/divided into smaller chunks called **pages**.
-
 Physical memory is divided into smaller pieces called **frames**.
-
 Moverover, an address in virtual memory belongs to a unique **page**, and this address
 also has an offset in that page that tells us where the address is relative to the beginning
 of the page.
 
 ### What is a page table? 
-
 Essentially, a page table is used to map virtual addresses to physical addresses. 
 
 ### MIT OpenCourseWare slides
