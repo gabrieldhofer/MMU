@@ -25,7 +25,6 @@
 #include <string.h>
 
 
-
 /********************************************//**
  *    For synchronizing threads
  ***********************************************/
@@ -143,7 +142,7 @@ void * makeTableAndRequests(void *threadid){
   //for(int i=0;i<16;i++) pageFrequency[i] = 0;
 
   /* Access virtual memory multiple times */
-  for(int i=0;i<8;i++){
+  for(int i=0;i<16;i++){
 
     /*  produce random address in virtual memory */
     int r = rand() % (1<<(v+p)+1);

@@ -29,9 +29,6 @@ your paging algorithm.
     1. How many pages for each process?
 
 
-
-
-
 #### Parameters: e, f, b, q, p
 For clarity, some parameters of the parameters mentioned above will be fixed: 
 
@@ -51,6 +48,21 @@ each process will have its own page table for the basic method.
 > P is the number of address bits used for the page offset in both virtual and physical addresses. V is the number of address bits used for the virtual page number. And M is the number of address bits used for the physical page number. All the other parameters, listed on the right, are derived from these three parameters.
 
 ![page\_map\_arithmetic](https://github.com/hofergabriel/MMU/blob/main/images/page_map_arithmetic.png)
+
+```
+/********************************************//**
+ *    8 bits in the page offset 
+ *    4 bits for virtual pages
+ *    3 bits for physical pages
+ * 
+ *    based on the example in the
+ *    MIT OpenCourseWare slides
+ ***********************************************/
+const int v = 4;
+const int m = 3;
+const int p = 8;
+```
+
 
 
 #### Benefits of Virtual Memory 
@@ -89,24 +101,6 @@ in the MIT Opencourseware [slides](https://ocw.mit.edu/courses/electrical-engine
 ![example\_virtual\_to\_physical\_translation](https://github.com/hofergabriel/MMU/blob/main/images/example_virtual_to_physical_translation.png)
 
 ![virtual\_memory\_the\_CS\_view](https://github.com/hofergabriel/MMU/blob/main/images/virtual_memory_the_CS_view.png)
-
-
-#### What are resident bits and dirty bits? 
-
-
-
-
-#### What is a Page Fault? 
-
-
-#### Handling Page Faults
-
-
-
-
-#### Thinking about Page Replacement
-
-
 
 
 #### Thinking about how to implement a simulation of virtual memory and paging
