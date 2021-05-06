@@ -51,7 +51,7 @@ in the MIT Opencourseware [slides](https://ocw.mit.edu/courses/electrical-engine
 
 > There are three architectural parameters that characterize a virtual memory system and hence the architecture of the MMU.
 
-P is the number of address bits used for the page offset in both virtual and physical addresses. V is the number of address bits used for the virtual page number. And M is the number of address bits used for the physical page number. All the other parameters, listed on the right, are derived from these three parameters.
+> P is the number of address bits used for the page offset in both virtual and physical addresses. V is the number of address bits used for the virtual page number. And M is the number of address bits used for the physical page number. All the other parameters, listed on the right, are derived from these three parameters.
 
 ![page\_map\_arithmetic](https://github.com/hofergabriel/MMU/blob/main/images/page_map_arithmetic.png)
 
