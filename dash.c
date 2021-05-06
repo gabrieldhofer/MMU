@@ -1,3 +1,20 @@
+/********************************************//**
+ *     
+ *  Author: Gabriel Hofer
+ *  Date: May 06, 2021
+ *  Course: CSC-458
+ * 
+ *  Sources: 
+ * 
+ *    https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-004-computation-structures-spring-2017/c16/c16s1/
+ *    https://www.tutorialspoint.com/multithreading-in-c
+ *    https://stackoverflow.com/questions/30941549/pthread-barrier-wait-hangs-after-creation-of-all-threads
+ *    http://www.qnx.com/developers/docs/qnxcar2/index.jsp?topic=%2Fcom.qnx.doc.neutrino.getting_started%2Ftopic%2Fs1_procs_barriers.html
+ * 
+ * 
+ ***********************************************/
+
+
 #include <stdio.h>
 #include <limits.h>
 #include <unistd.h>
@@ -6,6 +23,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <string.h>
+
 
 
 /********************************************//**
@@ -41,9 +59,14 @@ const int p = 12;
  *    PPN - physical page number
  * 
  ***********************************************/
-char R[16];
-char D[16];
-char PPN[16];
+//char R[16];
+//char D[16];
+//char PPN[16];
+
+
+
+
+
 
 int SelectLRUPage(){ }
 void ReadPage(int a, int b){ }
@@ -86,14 +109,37 @@ int VtoP(int Vaddr){
 }
 
 
+void readVirtual(char * R, char * D, int * PPN, int Vaddr){
+  // check R bits... 
+}
+
+void writeVirtual(char * R, char * D, int * PPN, int Vaddr){
+  // check R bits...
+}
+
+
 /********************************************//**
  *
- *
+ *    1. Allocate new Page Table for thread
+ *    2. Access virtual memory by calling VtoP()
  *
  ***********************************************/
-void *makeRequest(void *threadid){
+void * makeTableAndRequests(void *threadid){
   long tid = (long)threadid;
   printf("thread ID, %ld\n", tid);
+
+  /* thread allocates its own page table */
+  char * R = malloc(16);
+  char * D = malloc(16);
+  int * PPN = malloc(16);
+
+  /* access virtual memory multiple times */
+  for(int i=0;i<8;i++){
+    // random access 
+    int r = rand() % 16;
+
+  }
+
   pthread_barrier_wait(&barrier);
   pthread_exit(NULL);
 }
@@ -111,7 +157,7 @@ void separatePageTables(){
   pthread_t threads[NUM_THREADS];
   int rc;
   for(int i=0; i<NUM_THREADS; i++){
-    rc = pthread_create( &threads[i], NULL, makeRequest, (void *)i);
+    rc = pthread_create( &threads[i], NULL, makeTableAndRequests, (void *)i);
     if(rc){
       fprintf( stderr, "Error: unable to create thread, %d\n", rc);
       exit(-1);
@@ -137,7 +183,7 @@ void invertedPageTables(){
   pthread_t threads[NUM_THREADS];
   int rc;
   for(int i=0; i<NUM_THREADS; i++){
-    rc = pthread_create( &threads[i], NULL, makeRequest, (void *)i);
+    rc = pthread_create( &threads[i], NULL, makeTableAndRequests, (void *)i);
     if(rc){
       fprintf( stderr, "Error: unable to create thread, %d\n", rc);
       exit(-1);
@@ -149,9 +195,6 @@ void invertedPageTables(){
     pthread_join(threads[i], NULL);
   pthread_exit(NULL);
 }
-
-
-
 
 /********************************************//**
  *

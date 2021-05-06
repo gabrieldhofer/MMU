@@ -28,16 +28,15 @@ somewhere), requesting p pages from the physical memory.
 your paging algorithm.
     1. How many pages for each process?
 
-#### Terminology used in this Document
+#### Parameters: e, f, b, q, p
+For the simplicity and clarity of this project, e, f, b, will be fixed values in this program:
 
-**Page**
-**Frame** 
-**Page number**
-**Offset**
+* e = 2048
+* f = 8
+* b = 256
 
-#### Markdown Guide
-<https://www.markdownguide.org/basic-syntax/>
-
+The number of pages will be equal to the number of processes chosen by the user since each 
+process will have its own page table for the basic method mentioned in the writeup.
 
 #### Thinking about Memory 
 
@@ -48,8 +47,6 @@ Some of the benefits of virtual memory:
 applications.
 * isolated memory also leads to increased security 
 * creating arbitrarily large memory addresses that may or may not exist in actual memory
-
-[wiki: virtual memory](https://en.wikipedia.org/wiki/Virtual_memory#:~:text=The%20primary%20benefits%20of%20virtual,physically%20available%2C%20using%20the%20technique)
 
 #### What is segmentation and pages? 
 
@@ -68,11 +65,7 @@ of the page.
 
 Essentially, a page table is used to map virtual addresses to physical addresses. 
 
-
-
 #### What are resident bits and dirty bits? 
-
-
 
 
 
@@ -108,7 +101,7 @@ Here is the simulation code creating multiple threads, each sharing the same mem
 
 
 
-#### More Details
+#### Implementation Details
 
 * we will be using a 32-bit address space (uint32\_t)
 
@@ -144,6 +137,9 @@ Here is the simulation code creating multiple threads, each sharing the same mem
 #### Usage
 
 #### Testing
+
+#### Markdown Guide
+<https://www.markdownguide.org/basic-syntax/>
 
 
 
