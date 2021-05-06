@@ -250,8 +250,9 @@ int VtoP(int Vaddr, char * R, char * D, int * PPN, int * pageFrequency){
 
 #### PageFault
 
-When handling a page fault, 
+First, we call the SelectLRUPage() to find the page that is accessed the least often. Then we check to see if the dirty bit for that page is set. If it is, we need to write the current page to secondary memory (the disk). 
 
+Then the page table is updated to map the virtual page to a physical memory frame.
 
 ```
 /********************************************//**
@@ -272,6 +273,40 @@ void PageFault(int VPageNo, char * R, char * D, int * PPN, int * pageFrequency){
 }
 ```
 
+#### SelectLRUPage
+
+This function select the virtual page that is accessed the least often.
+This is done by updating a frequency table called `pageFrequency` every time
+a memory address is accessed.
+
+The function simply loops through the frequency array the returns the index
+of the smallest item in the array.
+
+```
+/********************************************//**
+ *    Page Replacement Algorithm: 
+ *    Least Frequently Used (LFU)
+ ***********************************************/
+int SelectLRUPage(int * pageFrequency){ 
+  // change to SelectLFUPage()
+  int idx=0;
+  int mn=100000;
+  printf("\tpageFrequency[]: ");
+  for(int i=0;i<16;i++){
+    printf("%d ",pageFrequency[i]);
+    if(pageFrequency[i]<mn){
+      mn = pageFrequency[i];
+      idx = i;
+    }
+  }
+  printf("\n");
+  pageFrequency[idx] = 1;
+  printf("\tLeast Frequency Page: %d\n", idx);
+  return idx;
+}
+```
+
+
 
 ### Usage
 
@@ -289,24 +324,6 @@ The second command is "exit" which exits the shell:
 /home/gabriel/dash> exit
 ```
 
-
-![virtual\_memory\_the\_CS\_view](https://github.com/hofergabriel/MMU/blob/main/images/virtual_memory_the_CS_view.png)
-
-
-#### The simulation
-
-In order to simulate virtual memory for multiple processes where either 
-* each process had it's own page table
-* all processes accessed the same inverted page table (IVT)
-I asked myself whether I should use processes or threads. 
-
-**Observation:** In the simulation we want the processes need to access the same physical memory.
-
-Therefore, it makes sense to make a multithreaded program where each thread represents a process
-because threads share the same memory while processes created with fork() don't share the same
-memory.
-
-Here is the simulation code creating multiple threads, each sharing the same memory. 
 
 
 
