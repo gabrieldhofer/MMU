@@ -38,7 +38,40 @@ your paging algorithm.
 #### Markdown Guide
 <https://www.markdownguide.org/basic-syntax/>
 
-#### Details
+
+#### Thinking about Memory 
+
+Why should we use virtual memory?
+
+Some of the benefits of virtual memory: 
+* providing a separate or "isolated" memory space for applications that isn't shared with other 
+applications.
+* isolated memory also leads to increased security 
+* creating arbitrarily large memory addresses that may or may not exist in actual memory
+
+[virtual memory](https://en.wikipedia.org/wiki/Virtual_memory#:~:text=The%20primary%20benefits%20of%20virtual,physically%20available%2C%20using%20the%20technique)
+
+
+#### Thinking about Page Replacement
+
+
+
+#### Thinking about how to implement a simulation of virtual memory and paging
+
+In order to simulate virtual memory for multiple processes where either 
+* each process had it's own page table
+* all processes accessed the same inverted page table (IVT)
+I asked myself whether I should use processes or threads. 
+
+Observation: In the simulation we want the processes need to access the same physical memory.
+
+Therefore, it makes sense to make a multithreaded program where each thread represents a process
+because threads share the same memory while processes created with fork() don't share the same
+memory.
+
+
+
+#### More Details
 
 * we will be using a 32-bit address space (uint32\_t)
 
