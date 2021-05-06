@@ -3,19 +3,17 @@
 #### Author: Gabriel Hofer
 #### Date: May 2, 2021
 
-### Benefits of Virtual Memory 
+### The Purpose of Virtual Memory 
 
-Why should operating systems support virtual memory?
-
+Why should operating systems have virtual memory?
 * Provide a separate, isolated memory space for applications that isn't shared with other 
 applications.
 * Isolated memory can help increase security 
 * Creating arbitrarily large memory addresses that may or may not exist in actual memory
 
-### What are segmentation and pages? 
+### What is Segmentation and Paging? 
 
-In order for different processes to have their own memory, we need to partition or divide or split the 
-memory into smaller pieces. This is what is known as **segmentation**.
+In order for different processes to have their own memory, memory needs to be partitioned or divided into smaller pieces. This is called **segmentation**.
 
 The range of virtual addresses is partitioned/divided into smaller chunks called **pages**.
 
@@ -50,9 +48,19 @@ const int p = 8;
 const int v = 4;
 const int m = 3;
 ```
-For clarity purposes, the program set p, v, and m to be fixed and unchanging. The following slide illustrates what p, v, and m mean.
+As we can see in the code, p, v and m are constant integers. So every time that the program runs, p=8, v=4, and m=3. This can be changed in the future to let the user choose values for these variables, but I kept them constant to make explaining the implementation easier.
 
 ![page\_map\_arithmetic](https://github.com/hofergabriel/MMU/blob/main/images/page_map_arithmetic.png)
+
+Based on the slide above we can calculate the following: 
+
+* $ (v+p) = 12 $ bits in virtual address
+* $ (m+p) = 11 $ bits in physical address
+* $ 2^v = 16 $ number of virtual pages
+* $ 2^m = 8 $ number of physical pages
+* $ 2^p = 256 $ number of bytes per physical page
+* $ 2^(v+p) = 4096 $ number of bytes in virtual memory
+* $ 2^(v+m) = 2048 $ number of bytes in physical memory
 
 
 ### Translating Virtual Addresses to Physical Addresses
