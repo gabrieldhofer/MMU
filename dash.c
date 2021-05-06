@@ -40,15 +40,22 @@ pthread_barrier_t   barrier;
 uint32_t NUM_THREADS;
 
 /********************************************//**
- *    8 bits in the offset 
+ *    8 bits in the page offset 
+ *    4 bits for virtual pages
+ *    3 bits for physical pages
+ * 
  *    based on the example in the
  *    MIT OpenCourseWare slides
  ***********************************************/
+const int v = 4;
+const int m = 3;
 const int p = 8;
+
 
 int SelectLRUPage(){ }
 void ReadPage(int a, int b){ }
 void WritePage(int a, int b){ }
+
 
 /********************************************//**
  *    Physical Memory (Array)
@@ -64,7 +71,7 @@ int DiskAdr[16];
 /********************************************//**
  *    Handle a missing page
  ***********************************************/
-void PageFault(int VPageNo){
+void PageFault(int VPageNo, char * R, char * D, int * PPN){
   int i;
 
   i = SelectLRUPage();
@@ -83,12 +90,12 @@ void PageFault(int VPageNo){
  *              
  *    @return physical address
  ***********************************************/
-int VtoP(int Vaddr){
+int VtoP(int Vaddr, char * R, char * D, int * PPN){
   int VPageNo = Vaddr >> p;
   int PO = Vaddr & ((1 << p) - 1);
 
   if(R[VPageNo] == 0)
-    PageFault(VPageNo);
+    PageFault(VPageNo, R, D, PPN);
   return (PPN[VPageNo] << p) | PO;
 }
 
@@ -110,7 +117,7 @@ void * makeTableAndRequests(void *threadid){
   for(int i=0;i<8;i++){
     // random access 
     int r = rand() % (1<<12);
-    VtoP(r)
+    VtoP(r, R, D, PPN);
   }
 
   pthread_barrier_wait(&barrier);
@@ -166,7 +173,7 @@ void invertedPageTables(){
 }
 
 /********************************************//**
- *              THE SIMULATION
+ *    Simulation Menu  
  ***********************************************/
 void simulation(){
   printf("--------------  Paging Simulation  --------------\n");
@@ -183,6 +190,7 @@ void simulation(){
   printf("Choose page table simulation type: \n");
   printf("\n\t1. Separate Page Tables\n");
   printf("\t2. Inverted Page Table\n\n");
+  printf("Option: ");
   scanf("%d", &option);
 
   switch(option){
