@@ -38,6 +38,13 @@ For the simplicity and clarity of this project, e, f, b, will be fixed values in
 The number of pages will be equal to the number of processes chosen by the user since each 
 process will have its own page table for the basic method mentioned in the writeup.
 
+
+This project will be based on implementing the model for virtual memory detailed and explained 
+in the MIT Opencourseware [slides](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-004-computation-structures-spring-2017/c16/c16s1/)
+
+> Here’s an example of the MMU in action. To make things simple, assume that the virtual address is 12 bits, consisting of an 8-bit page offset and a 4-bit virtual page number. So there are  virtual pages. The physical address is 11 bits, divided into the same 8-bit page offset and a 3-bit physical page number. So there are  physical pages.
+
+
 #### Thinking about Memory 
 
 Why should we use virtual memory?
