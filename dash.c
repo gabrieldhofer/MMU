@@ -40,11 +40,8 @@ uint32_t NUM_THREADS;
 
 /********************************************//**
  *    8 bits in the page offset 
- *    4 bits for virtual pages
- *    3 bits for physical pages
- * 
- *    based on the example in the
- *    MIT OpenCourseWare slides
+ *    4 bits for the virtual page number
+ *    3 bits for the physical page number
  ***********************************************/
 const int v = 4;
 const int m = 3;
@@ -110,7 +107,6 @@ void PageFault(int VPageNo, char * R, char * D, int * PPN, int * pageFrequency){
 
 /********************************************//**
  *    Virtual Address --> Physical Address
- *              
  *    @return physical address
  ***********************************************/
 int VtoP(int Vaddr, char * R, char * D, int * PPN, int * pageFrequency){
@@ -139,7 +135,6 @@ void * makeTableAndRequests(void *threadid){
   char * D = malloc( (1<<v) * sizeof(char));
   int * PPN = malloc( (1<<v) * sizeof(int));
   int * pageFrequency = malloc( (1<<v) * sizeof(int));
-  //for(int i=0;i<16;i++) pageFrequency[i] = 0;
 
   /* Access virtual memory multiple times */
   for(int i=0;i<16;i++){

@@ -5,24 +5,23 @@ Date: May 2, 2021
 ### The Purpose of Virtual Memory 
 Operating System support virtual memory for the following reasons: 
 * Applications can have their own separate or isolated chunk of memory that can't be accessed by other applications.
-applications.
-* Memory isolation increases security 
+* Memory isolation increases security.
 * It is possible to create arbitrarily large memory addresses that may or may not exist in actual memory
 
-### What is Segmentation and Paging? 
+### What are Segmentation, Paging, and Page Tables? 
 In order for different processes to have their own memory, memory needs to be partitioned or divided into smaller pieces. This is called **segmentation**.
 The range of virtual addresses is partitioned/divided into smaller chunks called **pages**.
 Physical memory is divided into smaller pieces called **frames**.
 Moverover, an address in virtual memory belongs to a unique **page**, and this address
 also has an offset in that page that tells us where the address is relative to the beginning
-of the page.
+of the page. An address in a frame also has an offset reltive to the begginning address of that frame. 
+Page tables are used to map virtual addresses to physical addresses. 
 
-### What is a page table? 
-Essentially, a page table is used to map virtual addresses to physical addresses. 
+![virtual\_memory](https://github.com/hofergabriel/MMU/blob/main/images/virtual_memory.png)
 
 ### MIT OpenCourseWare slides
 This project's simulation of virtual memory and paging was implemented based
-on the information presented in MIT's OpenCoursWare [slides](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-004-computation-structures-spring-2017/c16/c16s1/).
+on MIT's OpenCoursWare [slides](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-004-computation-structures-spring-2017/c16/c16s1/) on virtual memory.
 
 > There are three architectural parameters that characterize a virtual memory system and hence the architecture of the MMU.
 
@@ -31,11 +30,8 @@ on the information presented in MIT's OpenCoursWare [slides](https://ocw.mit.edu
 ```
 /********************************************//**
  *    8 bits in the page offset 
- *    4 bits for virtual pages
- *    3 bits for physical pages
- * 
- *    based on the example in the
- *    MIT OpenCourseWare slides
+ *    4 bits for the virtual page number
+ *    3 bits for the physical page number
  ***********************************************/
 const int p = 8;
 const int v = 4;
@@ -55,11 +51,9 @@ Based on the slide above we calculate the following for our simulation:
 * 2^(v+p) = 4096 bytes in virtual memory
 * 2^(v+m) = 2048 bytes in physical memory
 
-This slide illustrates the size of our page map, virtual memory, and physical memory.
+This slide illustrates the size of our page map, the size of virtual memory, and the size of physical memory for our program.
 
 ![example\_virtual\_to\_physical\_translation](https://github.com/hofergabriel/MMU/blob/main/images/example_virtual_to_physical_translation.png)
-
-
 
 
 
@@ -68,7 +62,7 @@ This slide illustrates the size of our page map, virtual memory, and physical me
 ![virtual\_memory\_the\_CS\_view](https://github.com/hofergabriel/MMU/blob/main/images/virtual_memory_the_CS_view.png)
 
 
-#### Thinking about how to implement a simulation of virtual memory and paging
+#### The simulation
 
 In order to simulate virtual memory for multiple processes where either 
 * each process had it's own page table
@@ -86,45 +80,6 @@ Here is the simulation code creating multiple threads, each sharing the same mem
 
 
 
-#### Implementation Details
-
-* we will be using a 32-bit address space (uint32\_t)
-
-
-
-![two\_processes\_osdev](https://github.com/hofergabriel/MMU/blob/main/images/two_processes_osdev.png)
-
-
-[osdev: Virtual Address Spaces](https://wiki.osdev.org/Paging#Virtual_Address_Spaces)
-
-
-
-### Questions
-
-#### How large should your simulated memory be? 
-
-#### How large is the virtual memory of each process? 
-
-#### How to simulate that a process is accessing a memory location? How often? In what order?
-
-#### How to keep track of what memory locations are in use? 
-
-#### What about shared frames? 
-
-#### Are there risk for race conditions? How will you handle it? 
-
-#### How to display all information, what makes sense for the user to see? 
-
-#### Should the user be allowed to decide what information to see? 
-
-#### Should the user be allowed to freeze the simulation at any moment and explore the current state? 
-
-#### Usage
-
-#### Testing
-
-#### Markdown Guide
-<https://www.markdownguide.org/basic-syntax/>
 
 
 
