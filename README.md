@@ -35,9 +35,24 @@ your paging algorithm.
 **Page number**
 **Offset**
 
+#### Markdown Guide
+<https://www.markdownguide.org/basic-syntax/>
+
 #### Details
 
 * we will be using a 32-bit address space (uint32\_t)
+
+
+
+
+
+
+![two\_processes\_osdev](https://github.com/hofergabriel/MMU/blob/main/images/two_processes_osdev.png)
+
+
+
+
+
 
 ### Questions
 
@@ -62,7 +77,6 @@ your paging algorithm.
 #### Usage
 
 #### Testing
-
 
 
 
