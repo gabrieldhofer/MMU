@@ -6,6 +6,9 @@
 #include <stdlib.h>
 #include <pthread.h>
 
+
+pthread_barrier_t   barrier;
+
 /********************************************//**
  * 
  *    The user decides the number of processes
@@ -16,7 +19,6 @@
  * 
  ***********************************************/
 uint32_t NUM_THREADS;
-
 
 /********************************************//**
  * 
@@ -86,6 +88,8 @@ int VtoP(int Vaddr){
 void *makeRequest(void *threadid){
   long tid = (long)threadid;
   printf("thread ID, %ld\n", tid);
+  pthread_barrier_wait(&barrier);
+  pthread_exit(NULL);
 }
 
 /********************************************//**
@@ -96,16 +100,29 @@ void *makeRequest(void *threadid){
 void separatePageTables(){
   printf("------------  Separate Page Tables  -------------\n");
 
+  printf("NUM_THREADS: %d\n", NUM_THREADS);
+  pthread_barrier_init (&barrier, NULL, NUM_THREADS+1 );
+
   pthread_t threads[NUM_THREADS];
   int rc;
   for(int i=0; i<NUM_THREADS; i++){
-    rc = pthread_create(&threads[i], NULL, makeRequest, (void *)i);
+    rc = pthread_create( &threads[i], NULL, makeRequest, (void *)i);
     if(rc){
       fprintf( stderr, "Error: unable to create thread, %d\n", rc);
       exit(-1);
     }
   }
-  pthread_exit(NULL);
+
+  printf("before barrier\n");
+  pthread_barrier_wait( &barrier );
+  printf("after barrier\n");
+
+  for(int i=0; i<NUM_THREADS; i++){
+    pthread_join(threads[i], NULL);
+  }
+
+
+  //pthread_exit(NULL);
 }
 
 /********************************************//**
@@ -116,15 +133,19 @@ void separatePageTables(){
 void invertedPageTables(){
   printf("------------  Inverted Page Tables  -------------\n");
 
+  pthread_barrier_init (&barrier, NULL, NUM_THREADS+1 );
+
   pthread_t threads[NUM_THREADS];
   int rc;
   for(int i=0; i<NUM_THREADS; i++){
-    rc = pthread_create(&threads[i], NULL, makeRequest, (void *)i);
+    rc = pthread_create( &threads[i], NULL, makeRequest, (void *)i);
     if(rc){
       fprintf( stderr, "Error: unable to create thread, %d\n", rc);
       exit(-1);
     }
   }
+
+  pthread_barrier_wait( &barrier );
   pthread_exit(NULL);
 }
 
