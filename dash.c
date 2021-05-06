@@ -52,14 +52,13 @@ const int m = 3;
 const int p = 8;
 
 /********************************************//**
- *    Page Replacement Algorithm: 
- *    Least Frequently Used (LFU)
+ *    Frequency Array for LFU 
  ***********************************************/
 int pageFrequency[16];
 
 /********************************************//**
  *    Page Replacement Algorithm: 
- *    Least Recently Used (LRU)
+ *    Least Frequently Used (LFU)
  ***********************************************/
 int SelectLRUPage(){ 
   // change to SelectLFUPage()
@@ -72,6 +71,7 @@ int SelectLRUPage(){
     }
   }
   pageFrequency[idx] = 1;
+  printf("\tLeast Frequency Page: %d\n", idx);
   return idx;
 }
 
@@ -93,8 +93,8 @@ int DiskAdr[16];
  *    Handle a missing page
  ***********************************************/
 void PageFault(int VPageNo, char * R, char * D, int * PPN){
+  printf("\tPage Fault occurred\n");
   int i;
-
   i = SelectLRUPage();
   if(D[i] == 1)
     WritePage(DiskAdr[i],PPN[i]);
@@ -115,6 +115,7 @@ int VtoP(int Vaddr, char * R, char * D, int * PPN){
   int VPageNo = Vaddr >> p;
   int PO = Vaddr & ((1 << p) - 1);
 
+  pageFrequency[VPageNo] += 1;
   if(R[VPageNo] == 0)
     PageFault(VPageNo, R, D, PPN);
   return (PPN[VPageNo] << p) | PO;
@@ -127,17 +128,22 @@ int VtoP(int Vaddr, char * R, char * D, int * PPN){
  ***********************************************/
 void * makeTableAndRequests(void *threadid){
   long tid = (long)threadid;
-  printf("thread ID, %ld\n", tid);
+  printf("Thread ID, %ld\n", tid);
 
   /* Thread allocates its own page table */
-  char * R = malloc(16);
-  char * D = malloc(16);
-  int * PPN = malloc(16);
+  /*  Allocate 2^v pages in page table */
+  char * R = malloc( 1<<v );
+  char * D = malloc( 1<<v );
+  int * PPN = malloc( 1<<v );
 
   /* Access virtual memory multiple times */
   for(int i=0;i<8;i++){
-    // random access 
-    int r = rand() % (1<<12);
+
+    /*  produce random address in virtual memory */
+    int r = rand() % (1<<(v+p));
+    printf("Thread %ld requesting address: %d\n", tid, r);
+
+    /*  request access to virtual memory location */
     VtoP(r, R, D, PPN);
   }
 
@@ -203,8 +209,8 @@ void simulation(){
   int q, p, pid;
   printf("\nNumber of processes: ");
   scanf("%d", &NUM_THREADS);
-  printf("\nNumber of pages: ");
-  scanf("%d", &p);
+  //printf("\nNumber of pages: ");
+  //scanf("%d", &p);
 
   /* Ask user which type of page table to simulate */
   int option;
