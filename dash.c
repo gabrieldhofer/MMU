@@ -136,16 +136,17 @@ void * makeTableAndRequests(void *threadid){
 
   /* Thread allocates its own page table */
   /*  Allocate 2^v pages in page table */
-  char * R = malloc( 1<<v );
-  char * D = malloc( 1<<v );
-  int * PPN = malloc( 1<<v );
-  int * pageFrequency = malloc( 1<<v );
+  char * R = malloc( (1<<v) * sizeof(char));
+  char * D = malloc( (1<<v) * sizeof(char));
+  int * PPN = malloc( (1<<v) * sizeof(int));
+  int * pageFrequency = malloc( (1<<v) * sizeof(int));
+  //for(int i=0;i<16;i++) pageFrequency[i] = 0;
 
   /* Access virtual memory multiple times */
   for(int i=0;i<8;i++){
 
     /*  produce random address in virtual memory */
-    int r = rand() % (1<<(v+p));
+    int r = rand() % (1<<(v+p)+1);
     printf("Thread %ld requesting address: %d\n", tid, r);
 
     /*  request access to virtual memory location */
