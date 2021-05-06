@@ -49,10 +49,44 @@ applications.
 * isolated memory also leads to increased security 
 * creating arbitrarily large memory addresses that may or may not exist in actual memory
 
-[virtual memory](https://en.wikipedia.org/wiki/Virtual_memory#:~:text=The%20primary%20benefits%20of%20virtual,physically%20available%2C%20using%20the%20technique)
+[wiki: virtual memory](https://en.wikipedia.org/wiki/Virtual_memory#:~:text=The%20primary%20benefits%20of%20virtual,physically%20available%2C%20using%20the%20technique)
+
+#### What is segmentation and pages? 
+
+In order for different processes to have their own memory, we need to partition or divide or split the 
+memory into smaller pieces. This is what is known as **segmentation**.
+
+The range of virtual addresses is partitioned/divided into smaller chunks called **pages**.
+
+Physical memory is divided into smaller pieces called **frames**.
+
+Moverover, an address in virtual memory belongs to a unique **page**, and this address
+also has an offset in that page that tells us where the address is relative to the beginning
+of the page.
+
+### What is a page table? 
+
+Essentially, a page table is used to map virtual addresses to physical addresses. 
+
+
+
+#### What are resident bits and dirty bits? 
+
+
+
+
+
+
+#### What is a Page Fault? 
+
+
+#### Handling Page Faults
+
+
 
 
 #### Thinking about Page Replacement
+
 
 
 
@@ -63,11 +97,14 @@ In order to simulate virtual memory for multiple processes where either
 * all processes accessed the same inverted page table (IVT)
 I asked myself whether I should use processes or threads. 
 
-Observation: In the simulation we want the processes need to access the same physical memory.
+**Observation:** In the simulation we want the processes need to access the same physical memory.
 
 Therefore, it makes sense to make a multithreaded program where each thread represents a process
 because threads share the same memory while processes created with fork() don't share the same
 memory.
+
+Here is the simulation code creating multiple threads, each sharing the same memory. 
+
 
 
 
@@ -77,14 +114,10 @@ memory.
 
 
 
-
-
-
 ![two\_processes\_osdev](https://github.com/hofergabriel/MMU/blob/main/images/two_processes_osdev.png)
-[1][1]
 
 
-[1]: https://wiki.osdev.org/Paging#Virtual_Address_Spaces
+[osdev: Virtual Address Spaces](https://wiki.osdev.org/Paging#Virtual_Address_Spaces)
 
 
 
