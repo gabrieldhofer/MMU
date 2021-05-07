@@ -14,14 +14,14 @@ The range of virtual addresses is partitioned/divided into smaller chunks called
 Physical memory is divided into smaller pieces called **frames**.
 Moverover, an address in virtual memory belongs to a unique **page**, and this address
 also has an offset in that page that tells us where the address is relative to the beginning
-of the page. An address in a frame also has an offset reltive to the begginning address of that frame. 
+of the page. An address in a frame also has an offset relative to the beginning address of that frame. 
 Page tables are used to map virtual addresses to physical addresses. 
 
 ![virtual\_memory](https://github.com/hofergabriel/MMU/blob/main/images/virtual_memory.png)
 
 ### MIT OpenCourseWare slides
 This project's simulation of virtual memory and paging was implemented based
-on MIT's OpenCoursWare [slides](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-004-computation-structures-spring-2017/c16/c16s1/) on virtual memory.
+on MIT's OpenCourseWare [slides](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-004-computation-structures-spring-2017/c16/c16s1/) on virtual memory.
 
 > There are three architectural parameters that characterize a virtual memory system and hence the architecture of the MMU.
 
@@ -177,7 +177,7 @@ A page table consists of
 * R - a character array where element i represents the resident bit for
 page i 
 * D - a character array where element i tells us if the contents in physical memory match the contents in secondary storage (on the disk).
-* PPN - an integer array where elelemnt i store the physical page number PPN for page i in the page table.
+* PPN - an integer array where elelement i store the physical page number PPN for page i in the page table.
 
 Additionally, we also allocate an array called `pageFrequency` which helps us keep track of how often pages are accessed by the CPU. 
 `pageFrequency` is used to implement the page replacement algorithm (LFU).
@@ -188,7 +188,7 @@ Inside the for loop, a random virtual address is generated.
 
 Then VtoP() is called to lookup the physical address.
 
-We don't do anything with the physical address, because we are mostly interested in implementing the "lookup".
+We don't do anything with the physical address, because we are mostly interested in understanding how "looking-up" physical addresses works.
 
 ```
 /********************************************//**
@@ -222,7 +222,7 @@ void * makeTableAndRequests(void *threadid){
 }
 ```
 
-#### VtoP
+#### VtoP()
 
 This function accepts a virtual address and calculates the virtual page number (`VPageNo`) and the page offset (`PO`).
 
@@ -248,7 +248,7 @@ int VtoP(int Vaddr, char * R, char * D, int * PPN, int * pageFrequency){
 }
 ```
 
-#### PageFault
+#### PageFault()
 
 First, we call the SelectLRUPage() to find the page that is accessed the least often. Then we check to see if the dirty bit for that page is set. If it is, we need to write the current page to secondary memory (the disk). 
 
@@ -273,7 +273,7 @@ void PageFault(int VPageNo, char * R, char * D, int * PPN, int * pageFrequency){
 }
 ```
 
-#### SelectLRUPage
+#### SelectLRUPage()
 
 This function select the virtual page that is accessed the least often.
 This is done by updating a frequency table called `pageFrequency` every time
@@ -309,21 +309,27 @@ int SelectLRUPage(int * pageFrequency){
 
 
 ### Usage
-
 ```
+$ tar -xzf final.tgz
+$ cd final
 $ make
 $ ./dash
 ```
 
-To keep things simple, there are two commands in this dash shell. We can run the simulation by entering the command "simulation" into the shell: 
+To keep things simple, there are two commands in this dash shell. We can run the simulation by entering the command "simulation" into the shell:
+
 ```
 /home/gabriel/dash> simulation
 ```
-The second command is "exit" which exits the shell: 
+
+Enter the number of processes you want to run. 
+Next, when the program asks for the user to choose a page table simulation type, enter ‘1’ because the inverted page table isn’t implemented. 
+Then the program creates NUM_THREADS processes and accesses the virtual memory multiple times. The output prints which process accessed which address, when a page fault occurs, the pageFrequency table, and which page is swapped. 
+The second command is "exit" which exits the shell:
+
 ```
 /home/gabriel/dash> exit
 ```
-
 
 
 
