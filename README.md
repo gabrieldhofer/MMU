@@ -171,7 +171,7 @@ void separatePageTables(){
 
 ```
 
-#### makeTableAndRequests
+#### makeTableAndRequests()
 The function allocates a page table for one process. The page table is actually implemented as three separate arrays.
 A page table consists of 
 * R - a character array where element i represents the resident bit for
